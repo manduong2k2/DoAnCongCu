@@ -2,22 +2,45 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 const CartList = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
-  const handleCheckOut=async()=>{
+  const handleCheckOut = async () => {
     if (window.confirm("Bạn có chắc muốn đặt hàng không?"))
-    try {
-      const response=await axios.post("http://jul2nd.ddns.net/api/order",{}, {
-        headers: {
-          Authorization: "Bearer " + getCookie("token"),
-        },
-      });
-      alert('Đặt hàng thành công !');
-    } catch (error) {
-      console.log(error);
-    }
-  }
+      try {
+        const response = await axios.post(
+          "http://jul2nd.ddns.net/api/order",
+          {},
+          {
+            headers: {
+              Authorization: "Bearer " + getCookie("token"),
+            },
+          }
+        );
+        alert("Đặt hàng thành công !");
+        navigate("/cart/success");
+      } catch (error) {
+        console.log(error);
+      }
+  };
+  const updateNumber = async (product_id,number) => {
+      try {
+        const response = await axios.post(
+          "http://jul2nd.ddns.net/api/order",
+          {
+            number:number
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + getCookie("token"),
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+  };
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -97,21 +120,28 @@ const CartList = () => {
 
   return (
     <div>
-      <h2>Your Cart</h2>
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <div className="container text-center text-black">
+          <div className="row">
+            <div className="col-md-6 offset-md-3">
+              <h3 className="mt-5">Giỏ hàng đang trống</h3>
+              <p className="lead" style={{margin: "30px auto"}}>
+                Hãy đến mục sản phẩm và chọn những gì bạn thích &#128538;
+              </p>
+              <Link
+                className="btn btn-primary"
+                style={{margin: "10px auto"}} to="/">
+                Đến trang sản phẩm
+              </Link>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="container form-container">
+          <h2>Your Cart</h2>
           <table className="table">
             <thead>
               <tr>
-                <th>
-                  <p>Chọn tất cả </p>
-                  <input
-                    style={{ cursor: "pointer", height: "25px", width: "25px" }}
-                    type="checkbox"
-                  />
-                </th>
                 <th>Tên sản phẩm</th>
                 <th>Hình</th>
                 <th>Số lượng</th>
@@ -123,17 +153,6 @@ const CartList = () => {
             <tbody>
               {cartItems.map((item, index) => (
                 <tr key={index} className="productItem">
-                  <td>
-                    <input
-                      className="item-check"
-                      style={{
-                        cursor: "pointer",
-                        height: "25px",
-                        width: "25px",
-                      }}
-                      type="checkbox"
-                    />
-                  </td>
                   <td>{item.product.name}</td>
                   <td>
                     <img
@@ -144,29 +163,30 @@ const CartList = () => {
                   </td>
                   <td>
                     {" "}
-                    <div style={{display: "inline-flex"}}>
-                    <button
-                      id="product<%=item.product.id%>button"
-                      onclick="DecreaseByOne('<%=item.product.id%>','<%=item.product.price%>')"
-                      class="btn btn-danger <%= item.quantity === 1 ? 'disable-btn' : '' %>"
-                    >
-                      -
-                    </button>
-                    <input
-                      id={`${item.product.id}`}
-                      style={{ width: "80px", textAlign: "center" }}
-                      type="number"
-                      min="1"
-                      value={item.quantity}
-                      attr={`data-id={item.product.id}`}
-                      className="form-control quantity"
-                    />
-                    <button
-                      onclick="IncreaseByOne('<%=item.product.id%>','<%=item.product.price%>')"
-                      class="btn btn-success"
-                    >
-                      +
-                    </button>
+                    <div style={{ display: "inline-flex" }}>
+                      <button
+                        id="product<%=item.product.id%>button"
+                        onclick="DecreaseByOne('<%=item.product.id%>','<%=item.product.price%>')"
+                        className="btn btn-danger <%= item.quantity === 1 ? 'disable-btn' : '' %>"
+                      >
+                        -
+                      </button>
+                      <input
+                        id={`${item.product.id}`}
+                        style={{ width: "80px", textAlign: "center" }}
+                        type="number"
+                        min="1"
+                        onChange={()=> updateNumber()}
+                        value={item.quantity}
+                        attr={`data-id={item.product.id}`}
+                        className="form-control quantity"
+                      />
+                      <button
+                        onclick="IncreaseByOne('<%=item.product.id%>','<%=item.product.price%>')"
+                        className="btn btn-success"
+                      >
+                        +
+                      </button>
                     </div>
                   </td>
                   <td>

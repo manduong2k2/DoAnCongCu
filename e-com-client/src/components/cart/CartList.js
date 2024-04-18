@@ -24,24 +24,6 @@ const CartList = () => {
         console.log(error);
       }
   };
-<<<<<<< HEAD
-  const updateNumber = async (product_id,number) => {
-      try {
-        const response = await axios.post(
-          "http://jul2nd.ddns.net/api/order",
-          {
-            number:number
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + getCookie("token"),
-            },
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
-=======
   const Increase = async (product_id) => {
     try {
       const response = await axios.post(
@@ -75,7 +57,6 @@ const CartList = () => {
     } catch (error) {
       console.log(error);
     }
->>>>>>> ae6929cb43b2cdc7801300a00fad2e2e1001b573
   };
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -161,20 +142,12 @@ const CartList = () => {
           <div className="row">
             <div className="col-md-6 offset-md-3">
               <h3 className="mt-5">Giỏ hàng đang trống</h3>
-<<<<<<< HEAD
-              <p className="lead" style={{margin: "30px auto"}}>
-=======
               <p className="lead" style={{ margin: "30px auto" }}>
->>>>>>> ae6929cb43b2cdc7801300a00fad2e2e1001b573
                 Hãy đến mục sản phẩm và chọn những gì bạn thích &#128538;
               </p>
               <Link
                 className="btn btn-primary"
-<<<<<<< HEAD
-                style={{margin: "10px auto"}} to="/">
-=======
                 style={{ margin: "10px auto" }} to="/">
->>>>>>> ae6929cb43b2cdc7801300a00fad2e2e1001b573
                 Đến trang sản phẩm
               </Link>
             </div>
@@ -209,30 +182,12 @@ const CartList = () => {
                     {" "}
                     <div style={{ display: "inline-flex" }}>
                       <button
-<<<<<<< HEAD
-                        id="product<%=item.product.id%>button"
-                        onclick="DecreaseByOne('<%=item.product.id%>','<%=item.product.price%>')"
-=======
                         onClick={() => Increase(item.product_id)}
->>>>>>> ae6929cb43b2cdc7801300a00fad2e2e1001b573
                         className="btn btn-danger <%= item.quantity === 1 ? 'disable-btn' : '' %>"
                       >
                         -
                       </button>
                       <input
-<<<<<<< HEAD
-                        id={`${item.product.id}`}
-                        style={{ width: "80px", textAlign: "center" }}
-                        type="number"
-                        min="1"
-                        onChange={()=> updateNumber()}
-                        value={item.quantity}
-                        attr={`data-id={item.product.id}`}
-                        className="form-control quantity"
-                      />
-                      <button
-                        onclick="IncreaseByOne('<%=item.product.id%>','<%=item.product.price%>')"
-=======
                         id={item.product_id+'number'}
                         style={{ width: "80px", textAlign: "center" }}
                         type="number"
@@ -241,7 +196,6 @@ const CartList = () => {
                       />
                       <button
                         onClick={() => Decrease(item.product_id)}
->>>>>>> ae6929cb43b2cdc7801300a00fad2e2e1001b573
                         className="btn btn-success"
                       >
                         +
